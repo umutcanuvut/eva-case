@@ -3,6 +3,7 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-vue-next";
+import ChartComponent from "./ChartComponent.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -29,6 +30,9 @@ const handleLogout = () => {
       <p class="text-lg">
         This is a protected route. Only authenticated users can see this.
       </p>
+      <div class="mt-8">
+        <ChartComponent />
+      </div>
     </main>
   </div>
 </template>

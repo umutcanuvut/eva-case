@@ -32,6 +32,7 @@ const store = createStore<State>({
         commit("setToken", token);
 
         localStorage.setItem("token", token);
+        localStorage.setItem("email", email);
 
         const userInfoResponse = await fetchUserInfo(token, email);
         const user: User = userInfoResponse.data.Data.user;
@@ -49,9 +50,27 @@ const store = createStore<State>({
         }
       }
     },
+
+    async restoreSession({ commit }) {
+      const token = localStorage.getItem("token");
+      const email = localStorage.getItem("email");
+
+      if (token && email) {
+        try {
+          const userInfoResponse = await fetchUserInfo(token, email);
+          const user: User = userInfoResponse.data.Data.user;
+          commit("setUser", user);
+        } catch (error) {
+          console.error("Failed to restore session:", error);
+          commit("logout");
+        }
+      }
+    },
+
     logout({ commit }) {
       commit("logout");
       localStorage.removeItem("token");
+      localStorage.removeItem("email");
     },
   },
   getters: {
