@@ -1,7 +1,5 @@
-<script setup lang="ts">
-import LoginForm from "./components/LoginForm.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <LoginForm />
+  <router-view />
 </template>

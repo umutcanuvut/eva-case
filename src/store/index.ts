@@ -37,12 +37,16 @@ const store = createStore<State>({
         const user: User = userInfoResponse.data.Data.user;
         commit("setUser", user);
       } catch (error: any) {
-        if (error.response && error.response.status === 401) {
-          console.error("Invalid credentials");
+        if (error.response) {
+          if (error.response.status === 401) {
+            throw new Error("Invalid email or password.");
+          } else if (error.response.status === 500) {
+            throw new Error("Server error. Please try again later.");
+          }
         } else {
           console.error("An unexpected error occurred:", error.message);
+          throw new Error("An unexpected error occurred. Please try again.");
         }
-        throw new Error("Login failed");
       }
     },
     logout({ commit }) {
