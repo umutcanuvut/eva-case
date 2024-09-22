@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SalesDataItem } from "@/types/salesData";
 
 const BaseUrl = "https://iapitest.eva.guru/";
 
@@ -31,7 +32,7 @@ export const fetchSalesData = (
   marketplace: string,
   sellerId: string,
   day = 60,
-) => {
+): Promise<{ data: { Data: { item: SalesDataItem[] } } }> => {
   return axios.post(
     `${BaseUrl}data/daily-sales-overview`,
     {
