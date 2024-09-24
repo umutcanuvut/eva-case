@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { fetchSalesData } from "@/services/api";
 import { useStore } from "vuex";
 import { Chart } from "highcharts-vue";
 import { SalesDataItem } from "@/types/salesData";
+
+const props = defineProps<{ timeframe: string }>();
 
 const chartOptions = ref<any>({
   chart: {
@@ -11,7 +13,8 @@ const chartOptions = ref<any>({
     height: 600,
   },
   title: {
-    text: "FBA and FBM Daily Sales",
+    text: "Daily Sales",
+    align: "left",
   },
   xAxis: {
     categories: [],
@@ -48,11 +51,11 @@ const chartOptions = ref<any>({
 
       return `
         <strong>${this.x}</strong><br>
-        <span style="color: ${this.points?.[0].color}">●</span> <strong>Total Sales:</strong> $${totalSales.toFixed(2)}<br>
-        <span style="color: #90ed7d">●</span> <strong>Shipping:</strong> $${shippingAmount.toFixed(2)}<br>
-        <span style="color: #00FF00">●</span> <strong>Profit:</strong> $${profit.toFixed(2)}<br>
-        <span style="color: #7cb5ec">●</span> <strong>FBA Sales:</strong> $${fbaSales.toFixed(2)}<br>
-        <span style="color: #434348">●</span> <strong>FBM Sales:</strong> $${fbmSales.toFixed(2)}
+        <span style="color: #82E0AA">●</span> <strong>Total Sales:</strong> $${totalSales.toFixed(2)}<br>
+        <span>●</span> <strong>Shipping:</strong> $${shippingAmount.toFixed(2)}<br>
+        <span>●</span> <strong>Profit:</strong> $${profit.toFixed(2)}<br>
+        <span style="color: #5e2ca5">●</span> <strong>FBA Sales:</strong> $${fbaSales.toFixed(2)}<br>
+        <span style="color: #a4a9f5">●</span> <strong>FBM Sales:</strong> $${fbmSales.toFixed(2)}
       `;
     },
   },
@@ -82,13 +85,18 @@ const loading = ref(true);
 const store = useStore();
 const user = store.getters.getUser;
 
-const getSalesData = async () => {
+const getSalesData = async (timeframe: string) => {
   try {
     const token = store.state.token;
     const marketplace = user.store[0].marketplaceName;
     const sellerId = user.store[0].storeId;
 
-    const response = await fetchSalesData(token, marketplace, sellerId, 60);
+    const response = await fetchSalesData(
+      token,
+      marketplace,
+      sellerId,
+      +timeframe,
+    );
     salesData.value = response.data.Data.item;
 
     const dates = salesData.value.map((item: SalesDataItem) => item.date);
@@ -115,22 +123,20 @@ const getSalesData = async () => {
   }
 };
 
-onMounted(() => {
-  getSalesData();
-});
+watch(
+  () => props.timeframe,
+  (newTimeframe) => {
+    getSalesData(newTimeframe);
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
-  <div>
-    <h1>Daily Sales Overview Data</h1>
-
-    <div v-if="loading">Loading sales data...</div>
-
+  <div class="mt-8">
     <div v-if="errorMessage" class="text-red-500">{{ errorMessage }}</div>
-
     <div v-if="salesData">
       <Chart :options="chartOptions" />
-      <!-- <pre>{{ salesData }}</pre> -->
     </div>
   </div>
 </template>

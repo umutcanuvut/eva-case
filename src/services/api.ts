@@ -31,7 +31,7 @@ export const fetchSalesData = (
   token: string,
   marketplace: string,
   sellerId: string,
-  day = 60,
+  day: number,
 ): Promise<{ data: { Data: { item: SalesDataItem[] } } }> => {
   return axios.post(
     `${BaseUrl}data/daily-sales-overview`,
