@@ -20,3 +20,12 @@
    ```bash
    npm run dev
    ```
+
+## Technologies Used
+
+- **Vue**: For building the user interface.
+- **TypeScript**: For type safety and better development experience.
+- **Tailwind CSS**: For styling the application.
+- **Vuex**: For state management
+- **ShadcnUI**: As the component library
+- **HighCharts**: For creating required chart for the project
