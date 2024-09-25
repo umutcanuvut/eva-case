@@ -36,3 +36,22 @@ export interface SalesDataItem {
   totalVatAmount: number;
   otherFee: number;
 }
+
+export interface SkuItem {
+  sku: string;
+  productName: string;
+  qty: number;
+  amount: number;
+  shippingAmount: number;
+  qty2: number;
+  amount2: number;
+  shippingAmount2: number;
+  sortingAmount: number;
+  imageUrl: string;
+  refundPercantage?: number | null;
+}
+
+export interface RefundRate {
+  sku: string;
+  refundRate: number;
+}
