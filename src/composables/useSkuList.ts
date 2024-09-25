@@ -15,6 +15,8 @@ export function useSkuList() {
     isDaysCompare: number,
     salesDate: string,
     salesDate2: string,
+    pageNumber: number,
+    pageSize: number = 30,
   ) => {
     try {
       loading.value = true;
@@ -25,22 +27,29 @@ export function useSkuList() {
         marketplace,
         sellerId,
         isDaysCompare,
-        1,
-        30,
+        pageNumber,
+        pageSize,
         salesDate,
         salesDate2,
       );
-      skuList.value = skuResponse.data.Data.item.skuList;
 
-      const skuArray = skuList.value.map((item) => item.sku);
-      const refundResponse = await fetchSkuRefundRates(
-        token,
-        marketplace,
-        sellerId,
-        skuArray,
-        60,
-      );
-      refundRates.value = refundResponse.data.Data;
+      const newSkuList = skuResponse.data.Data.item.skuList;
+
+      skuList.value = [...skuList.value, ...newSkuList];
+
+      const newSkuArray = newSkuList.map((item: SkuItem) => item.sku);
+
+      if (newSkuArray.length > 0) {
+        const refundResponse = await fetchSkuRefundRates(
+          token,
+          marketplace,
+          sellerId,
+          newSkuArray,
+          60,
+        );
+
+        refundRates.value = [...refundRates.value, ...refundResponse.data.Data];
+      }
     } catch (error: any) {
       errorMessage.value = `Error fetching SKU data: ${error.message}`;
     } finally {
