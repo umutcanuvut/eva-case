@@ -40,6 +40,9 @@ watch(
       return;
     }
 
+    skuList.value = [];
+    currentPage.value = 1;
+
     const token = store.state.token;
     const marketplace = store.getters.getUser.store[0].marketplaceName;
     const sellerId = store.getters.getUser.store[0].storeId;
@@ -116,7 +119,10 @@ const prevPage = () => {
 
 <template>
   <div class="mt-8">
-    <Table v-if="skuList.length > 0" class="bg-white shadow-lg">
+    <Table
+      v-if="skuList.length > 0 && clickedColumns.length > 0"
+      class="bg-white shadow-lg"
+    >
       <TableHeader>
         <TableRow>
           <TableHead>SKU</TableHead>
