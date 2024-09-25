@@ -11,12 +11,24 @@ export const getChartOptions = (
   fbaData: number[],
   fbmData: number[],
   profitData: number[],
+  handleColumnClick: (clickedCategory: string) => void,
 ) => ({
   chart: { type: "column", height: 600 },
   title: { text: "Daily Sales", align: "left" },
   xAxis: { categories: dates },
   yAxis: { title: { text: "Amount ($)" } },
-  plotOptions: { column: { stacking: "normal" } },
+  plotOptions: {
+    column: {
+      stacking: "normal",
+      events: {
+        click: function (event: any) {
+          const clickedCategory =
+            event.point.series.chart.xAxis[0].categories[event.point.x];
+          handleColumnClick(clickedCategory);
+        },
+      },
+    },
+  },
   tooltip: { shared: true, useHTML: true, formatter: undefined },
   series: [
     {

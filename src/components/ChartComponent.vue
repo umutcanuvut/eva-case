@@ -6,7 +6,10 @@ import { useStore } from "vuex";
 import { Chart } from "highcharts-vue";
 import { SalesDataItem } from "@/types/salesData";
 
-const props = defineProps<{ timeframe: string }>();
+const props = defineProps<{
+  timeframe: string;
+  handleColumnClick: (category: string) => void;
+}>();
 
 const salesData = ref<SalesDataItem[]>([]);
 const errorMessage = ref<string | null>(null);
@@ -46,6 +49,7 @@ const getSalesData = async (timeframe: string) => {
       fbaAmounts,
       fbmAmounts,
       profitAmounts,
+      props.handleColumnClick,
     );
     chartOptions.value.tooltip.formatter = function () {
       return tooltipFormatter.call(this, salesData.value);

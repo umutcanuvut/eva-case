@@ -17,7 +17,7 @@ const handleTimeframeChange = (value: string) => {
 </script>
 
 <template>
-  <div class="absolute right-4 top-11 z-50 p-4">
+  <div class="absolute right-4 top-11 z-10 p-4">
     <Select
       v-model="props.modelValue"
       @update:model-value="handleTimeframeChange"
