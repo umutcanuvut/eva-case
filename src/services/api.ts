@@ -49,3 +49,55 @@ export const fetchSalesData = (
     },
   );
 };
+
+export const fetchSalesSkuList = (
+  token: string,
+  marketplace: string,
+  sellerId: string,
+  isDaysCompare: number,
+  pageNumber: number,
+  pageSize: number,
+  salesDate: string,
+  salesDate2: string = "",
+) => {
+  return axios.post(
+    `${BaseUrl}data/daily-sales-sku-list`,
+    {
+      isDaysCompare: isDaysCompare,
+      marketplace: marketplace,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      salesDate: salesDate,
+      salesDate2: salesDate2,
+      sellerId: sellerId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
+
+export const fetchSkuRefundRates = (
+  token: string,
+  marketplace: string,
+  sellerId: string,
+  skuList: string[],
+  requestedDay: number = 60,
+) => {
+  return axios.post(
+    `${BaseUrl}data/get-sku-refund-rate`,
+    {
+      marketplace: marketplace,
+      sellerId: sellerId,
+      skuList: skuList,
+      requestedDay: requestedDay,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
